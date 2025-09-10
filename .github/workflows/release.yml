@@ -25,7 +25,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run dist
+        run: npm run dist -- --publish=never
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
