@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>CoreTrace GUI</title>
+  </head>
+  <body>
+    <button id="notepad_button">click me to open notepad !</button>
+  </body>
+</html>
+
+<script>
+  const { ipcRenderer } = require('electron');
+
+  const btn = document.getElementById('notepad_button');
+  btn.addEventListener('click', () => {
+    ipcRenderer.send('open-editor');
+  });
+</script>
+
+<style>
+  #notepad_button {
+    background-color: rgb(234, 176, 176);
+    font-family: cursive;
+  }
+</style>
