@@ -17,7 +17,12 @@
     "electron-reload": "^2.0.0-alpha.1"
   },
   "build": {
+    "asar": true,
+    "extraResources": [],
+    "asarUnpack": [],
+    "afterPack": "./scripts/remove-locales.js",
     "appId": "com.coretrace.ctracegui",
+    "compression": "maximum",
     "productName": "CtraceGUI",
     "win": {
       "target": "nsis",
