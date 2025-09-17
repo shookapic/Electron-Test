@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ctrace-gui IDE</title>
+  <title>CTrace GUI</title>
   <link rel="icon" href="../assets/ctrace.ico">
   <style>
     * {
@@ -920,11 +920,11 @@
           <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
         </svg>
       </div>
-      <div class="activity-item" title="Extensions" onclick="showExtensions()">
+      <!-- <div class="activity-item" title="Extensions" onclick="showExtensions()">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8.5 1a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
         </svg>
-      </div>
+      </div> -->
     </div>
 
     <!-- Sidebar -->
@@ -985,6 +985,9 @@
             <div class="dropdown-item" onclick="saveFile(); hideAllMenus();">
               <span>Save</span>
               <span class="shortcut">Ctrl+S</span>
+            </div>
+            <div class="dropdown-item" onclick="autoSave(); hideAllMenus();">
+              <span>Auto Save</span>
             </div>
             <div class="dropdown-item" onclick="saveAsFile(); hideAllMenus();">
               <span>Save As...</span>
@@ -1113,11 +1116,10 @@
         <div class="statusbar-left">
           <span id="lineCounter">Ln 1, Col 1</span>
           <span id="fileStatus">UTF-8</span>
-          <span>Plain Text</span>
+          <span id="fileType">Plain Text</span>
         </div>
         <div class="statusbar-right">
-          <span>Spaces: 2</span>
-          <span>ctrace-gui</span>
+          <span id="tool_version">CTraceGUI v0.1.0</span>
         </div>
       </div>
     </div>
@@ -1160,7 +1162,7 @@
         </div>
 
         <div>
-          <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #f0f6fc;">Extensions</h3>
+          <!-- <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #f0f6fc;">Extensions</h3> -->
           <div style="font-size: 12px; color: #7d8590;">
             <p>No extensions installed</p>
             <button style="background: #1f6feb; border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px;">Browse Extensions</button>
@@ -1172,5 +1174,34 @@
 
   <!-- Go to Line Dialog -->
   <script src="./main-ui.js"></script>
+  <script>
+    // File type detection based on file name
+    function detectFileType(filename) {
+      if (!filename) return "Plain Text";
+      const lower = filename.toLowerCase();
+      if (lower === "cmakelists.txt" || lower.endsWith(".cmake")) return "CMake";
+      if (lower.endsWith(".c")) return "C";
+      if (lower.endsWith(".cpp") || lower.endsWith(".cc") || lower.endsWith(".cxx")) return "C++";
+      if (lower.endsWith(".h") || lower.endsWith(".hpp") || lower.endsWith(".hh") || lower.endsWith(".hxx")) return "C/C++ Header";
+      if (lower.endsWith(".js")) return "JavaScript";
+      if (lower.endsWith(".ts")) return "TypeScript";
+      if (lower.endsWith(".py")) return "Python";
+      if (lower.endsWith(".json")) return "JSON";
+      if (lower.endsWith(".md")) return "Markdown";
+      if (lower.endsWith(".txt")) return "Plain Text";
+      return "Plain Text";
+    }
+
+    // Call this function when a file is opened or selected
+    function updateFileTypeStatus(filename) {
+      const type = detectFileType(filename);
+      const el = document.getElementById("fileType");
+      if (el) el.textContent = type;
+    }
+
+    // Example: Hook into your file open logic
+    // window.updateFileTypeStatus = updateFileTypeStatus;
+    // When you open a file, call: updateFileTypeStatus(filename);
+  </script>
 </body>
 </html>

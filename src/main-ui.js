@@ -4,6 +4,28 @@
 const { ipcRenderer } = require('electron');
 
 document.addEventListener('DOMContentLoaded', function () {
+  // File type detection based on file name (copied from index.html for DRY)
+  function detectFileType(filename) {
+    if (!filename) return "Plain Text";
+    const lower = filename.toLowerCase();
+    if (lower === "cmakelists.txt" || lower.endsWith(".cmake")) return "CMake";
+    if (lower.endsWith(".c")) return "C";
+    if (lower.endsWith(".cpp") || lower.endsWith(".cc") || lower.endsWith(".cxx")) return "C++";
+    if (lower.endsWith(".h") || lower.endsWith(".hpp") || lower.endsWith(".hh") || lower.endsWith(".hxx")) return "C/C++ Header";
+    if (lower.endsWith(".js")) return "JavaScript";
+    if (lower.endsWith(".ts")) return "TypeScript";
+    if (lower.endsWith(".py")) return "Python";
+    if (lower.endsWith(".json")) return "JSON";
+    if (lower.endsWith(".md")) return "Markdown";
+    if (lower.endsWith(".txt")) return "Plain Text";
+    return "Plain Text";
+  }
+
+  function updateFileTypeStatus(filename) {
+    const type = detectFileType(filename);
+    const el = document.getElementById("fileType");
+    if (el) el.textContent = type;
+  }
   const editor = document.getElementById('editor');
   const gutter = document.getElementById('gutter');
   const lineCounter = document.getElementById('lineCounter');
@@ -23,6 +45,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const editorArea = document.getElementById('editor-area');
 
   // State management
+  // Make TAB key insert tab character in editor
+  if (editor) {
+    editor.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        // Insert tab character at cursor
+        editor.setRangeText('\t', start, end, 'end');
+        // Update gutter and status bar
+        updateGutter();
+        updateStatusBar();
+      }
+    });
+  }
   let isResizing = false;
   let resizeType = null;
   let currentWorkspacePath = null;
@@ -79,13 +116,13 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Update file status indicator
     const fileStatusElement = document.getElementById('fileStatus');
+    const fileTypeElement = document.getElementById('fileType');
     if (fileStatusElement && activeTabId) {
       const currentTab = openTabs.get(activeTabId);
       if (currentTab && currentTab.fileInfo) {
-        const { fileInfo } = currentTab;
+        const { fileInfo, fileName } = currentTab;
         let statusText = 'UTF-8';
         let statusStyle = '';
-        
         if (fileInfo.encodingWarning) {
           statusText = '⚠️ Non-UTF8';
           statusStyle = 'color: #f85149; cursor: pointer;';
@@ -96,8 +133,6 @@ document.addEventListener('DOMContentLoaded', function () {
           statusText = `📄 Partial (${loadedKB}KB/${totalKB}KB)`;
           statusStyle = 'color: #f0883e; cursor: pointer;';
           fileStatusElement.title = 'Click to load full file';
-          
-          // Add click handler to load full file
           fileStatusElement.onclick = () => loadFullFile(currentTab.filePath);
         } else {
           statusText = 'UTF-8';
@@ -105,15 +140,19 @@ document.addEventListener('DOMContentLoaded', function () {
           fileStatusElement.onclick = null;
           fileStatusElement.title = '';
         }
-        
         fileStatusElement.textContent = statusText;
         fileStatusElement.style.cssText = statusStyle;
+        // Update file type in status bar
+        if (fileTypeElement) updateFileTypeStatus(fileName);
       } else {
         fileStatusElement.textContent = 'UTF-8';
         fileStatusElement.style.cssText = '';
         fileStatusElement.onclick = null;
         fileStatusElement.title = '';
+        if (fileTypeElement) updateFileTypeStatus("");
       }
+    } else if (fileTypeElement) {
+      updateFileTypeStatus("");
     }
   }
 
@@ -457,17 +496,16 @@ document.addEventListener('DOMContentLoaded', function () {
       editor.value = newTab.content;
       updateGutter();
       updateStatusBar();
-      
+      // Update file type in status bar
+      updateFileTypeStatus(newTab.fileName);
       // Update tab appearance
       document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active');
       });
-      
       const tabElement = document.querySelector(`[data-tab-id="${tabId}"]`);
       if (tabElement) {
         tabElement.classList.add('active');
       }
-      
       // Update file tree selection
       if (newTab.filePath) {
         document.querySelectorAll('.file-tree-item').forEach(el => el.classList.remove('selected'));
@@ -601,13 +639,16 @@ document.addEventListener('DOMContentLoaded', function () {
     for (const [tabId, tab] of openTabs) {
       if (tab.filePath === filePath) {
         switchToTab(tabId);
+        // Also update file type in status bar
+        updateFileTypeStatus(tab.fileName);
         return;
       }
     }
-    
     // Create new tab
     const tabId = createTab(fileName, filePath, content, fileInfo);
     switchToTab(tabId);
+    // Also update file type in status bar
+    updateFileTypeStatus(fileName);
   }
 
   // Save file
@@ -1068,9 +1109,9 @@ document.addEventListener('DOMContentLoaded', function () {
     toolsPanel.classList.remove('active');
   };
 
-  window.showExtensions = function () {
-    showNotification('Extensions marketplace - Coming soon!', 'info');
-  };
+  // window.showExtensions = function () {
+  //   showNotification('Extensions marketplace - Coming soon!', 'info');
+  // };
 
   // Optimized panel resizing functionality
   window.initSidebarResize = function (e) {
