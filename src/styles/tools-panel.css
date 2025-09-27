@@ -1,0 +1,54 @@
+/* Tools panel styles */
+.tools-panel {
+  width: 350px;
+  min-width: 200px;
+  max-width: 60vw;
+  background: #161b22;
+  border-left: 1px solid #21262d;
+  display: none;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.tools-panel.active {
+  display: flex;
+}
+
+.tools-panel-header {
+  height: 35px;
+  background: #0d1117;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid #21262d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tools-panel-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #7d8590;
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.close-btn:hover {
+  background: #21262d;
+  color: #f0f6fc;
+}

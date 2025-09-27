@@ -1,0 +1,73 @@
+/* Menu bar styles */
+.menubar {
+  height: 30px;
+  background: #161b22;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-bottom: 1px solid #21262d;
+  font-size: 12px;
+  -webkit-app-region: no-drag;
+}
+
+.menu-item {
+  position: relative;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  color: #f0f6fc;
+  transition: all 0.15s ease;
+}
+
+.menu-item:hover {
+  background: #21262d;
+}
+
+.menu-item.active {
+  background: #1f6feb;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+  padding: 4px 0;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #f0f6fc;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background: #30363d;
+}
+
+.dropdown-item .shortcut {
+  color: #7d8590;
+  font-size: 11px;
+  margin-left: 20px;
+}
+
+.dropdown-separator {
+  height: 1px;
+  background: #30363d;
+  margin: 4px 0;
+}

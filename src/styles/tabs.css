@@ -1,0 +1,85 @@
+/* Tab styles */
+.tabs-container {
+  height: 35px;
+  background: #0d1117;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #21262d;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.tab {
+  height: 35px;
+  padding: 0 12px 0 16px;
+  display: flex;
+  align-items: center;
+  background: #161b22;
+  border-right: 1px solid #21262d;
+  cursor: pointer;
+  color: #7d8590;
+  font-size: 12px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  min-width: 120px;
+  max-width: 200px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tab .tab-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.tab .tab-close {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0;
+  transition: all 0.15s ease;
+  color: #7d8590;
+}
+
+.tab:hover .tab-close {
+  opacity: 1;
+}
+
+.tab .tab-close:hover {
+  background: #30363d;
+  color: #f0f6fc;
+}
+
+.tab.active {
+  background: #0d1117;
+  color: #f0f6fc;
+  border-bottom: 2px solid #1f6feb;
+}
+
+.tab.active .tab-close {
+  opacity: 0.7;
+}
+
+.tab:hover:not(.active) {
+  background: #21262d;
+  color: #f0f6fc;
+}
+
+.tab.modified .tab-label::after {
+  content: "•";
+  margin-left: 4px;
+  color: #f0f6fc;
+}
+
+.tab-warning {
+  margin-left: 4px;
+  font-size: 10px;
+}

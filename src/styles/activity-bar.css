@@ -1,0 +1,45 @@
+/* Activity bar styles */
+.activity-bar {
+  width: 48px;
+  background: #161b22;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  border-right: 1px solid #21262d;
+  box-shadow: 1px 0 4px rgba(0,0,0,0.1);
+}
+
+.activity-bar .activity-item {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #7d8590;
+  position: relative;
+}
+
+.activity-bar .activity-item:hover {
+  background: #21262d;
+  color: #f0f6fc;
+}
+
+.activity-bar .activity-item.active {
+  background: #1f6feb;
+  color: #ffffff;
+}
+
+.activity-bar .activity-item.active::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  width: 2px;
+  height: 16px;
+  background: #1f6feb;
+  border-radius: 0 2px 2px 0;
+}

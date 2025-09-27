@@ -1,0 +1,52 @@
+/* Welcome screen styles */
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: #7d8590;
+  background: #0d1117;
+}
+
+.welcome-screen h1 {
+  font-size: 32px;
+  font-weight: 300;
+  margin: 0 0 16px 0;
+  color: #1f6feb;
+}
+
+.welcome-screen p {
+  font-size: 16px;
+  margin: 0 0 32px 0;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.welcome-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.welcome-action {
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #f0f6fc;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.welcome-action:hover {
+  background: #30363d;
+  border-color: #1f6feb;
+}

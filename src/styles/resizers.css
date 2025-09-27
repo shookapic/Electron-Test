@@ -1,0 +1,37 @@
+/* Resizer styles */
+.resizer {
+  width: 4px;
+  background: transparent;
+  cursor: col-resize;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  transition: none; /* Remove transition for better performance */
+}
+
+.resizer:hover {
+  background: #1f6feb;
+}
+
+.resizer:active {
+  background: #1f6feb;
+}
+
+.resizer-right {
+  right: -2px;
+}
+
+.resizer-left {
+  left: -2px;
+}
+
+/* Sidebar resizer */
+.sidebar .resizer {
+  right: -2px;
+}
+
+/* Tools panel resizer */
+.tools-panel .resizer {
+  left: -2px;
+}

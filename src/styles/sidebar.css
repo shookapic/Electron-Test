@@ -1,0 +1,73 @@
+/* Sidebar styles */
+.sidebar {
+  width: 280px;
+  min-width: 180px;
+  max-width: 50vw;
+  background: #161b22;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #21262d;
+  position: relative;
+}
+
+.sidebar-header {
+  height: 35px;
+  background: #0d1117;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #21262d;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #7d8590;
+}
+
+.sidebar-content {
+  flex: 1;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+/* File tree styles */
+.file-tree {
+  font-size: 12px;
+}
+
+.file-tree-item {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  margin: 1px 0;
+  transition: background-color 0.15s ease;
+}
+
+.file-tree-item:hover {
+  background: #21262d;
+}
+
+.file-tree-item.selected {
+  background: #1f6feb;
+  color: white;
+}
+
+.file-tree-item .icon {
+  margin-right: 6px;
+  width: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.file-tree-item .name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-tree-folder {
+  margin-left: 12px;
+}
