@@ -378,6 +378,77 @@ class UIController {
     window.showToolsPanel = () => this.showToolsPanel();
     window.hideToolsPanel = () => this.hideToolsPanel();
 
+    // CTrace helpers
+    const stripAnsi = (input) => {
+      if (!input || typeof input !== 'string') return input;
+      const ansiRegex = /\x1b\[[0-9;]*m/g;
+      return input.replace(ansiRegex, '');
+    };
+
+    window.runCTrace = async () => {
+      const outEl = document.getElementById('ctrace-output');
+      this.showToolsPanel();
+      if (!outEl) {
+        this.notificationManager.showError('CTrace output panel not found');
+        return;
+      }
+
+      const active = this.tabManager.getActiveTab();
+      const currentFilePath = active && active.filePath ? active.filePath : null;
+      if (!currentFilePath) {
+        outEl.textContent = 'No active file to analyze. Open a file first.';
+        this.notificationManager.showWarning('Open a file to analyze with CTrace');
+        return;
+      }
+
+      outEl.textContent = `Running ctrace on: ${currentFilePath}`;
+      try {
+        let args = [];
+        args.push(`--input=${currentFilePath}`);
+        args.push("--static");
+        args.push("--sarif-format");
+        const result = await window.ipcRenderer.invoke('run-ctrace', args);
+        if (result && result.success) {
+          outEl.textContent = stripAnsi(result.output || '(no output)');
+          this.notificationManager.showSuccess('CTrace completed successfully');
+        } else {
+          const details = (result && (result.stderr || result.output || result.error)) || 'Unknown error';
+          outEl.textContent = `Error running ctrace:\n${stripAnsi(details)}`;
+          this.notificationManager.showError('Failed to run CTrace');
+        }
+        // Auto-scroll to bottom
+        outEl.scrollTop = outEl.scrollHeight;
+      } catch (err) {
+        outEl.textContent = `Exception: ${err.message}`;
+        this.notificationManager.showError('Error invoking CTrace');
+      }
+    };
+
+    window.clearCTraceOutput = () => {
+      const outEl = document.getElementById('ctrace-output');
+      if (outEl) outEl.textContent = '';
+    };
+
+    window.copyCTraceOutput = () => {
+      const outEl = document.getElementById('ctrace-output');
+      if (!outEl) return;
+      const text = outEl.textContent || '';
+      try {
+        // Prefer Electron clipboard if available via require
+        const { clipboard } = require('electron');
+        clipboard.writeText(text);
+        this.notificationManager.showSuccess('Output copied to clipboard');
+      } catch (_) {
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text)
+            .then(() => this.notificationManager.showSuccess('Output copied to clipboard'))
+            .catch(() => this.notificationManager.showError('Failed to copy output'));
+        } else {
+          this.notificationManager.showError('Clipboard not available');
+        }
+      }
+    };
+
     // Tab manager reference for global access
     window.tabManager = this.tabManager;
     window.searchManager = this.searchManager;

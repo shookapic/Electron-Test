@@ -4,6 +4,7 @@ const path = require('path');
 // Import IPC handlers
 const { setupFileHandlers } = require('./main/ipc/fileHandlers');
 const { setupEditorHandlers } = require('./main/ipc/editorHandlers');
+const { setupCtraceHandlers } = require('./main/ipc/ctraceHandlers');
 
 function createWindow () {
   const iconPath = path.join(__dirname, '../assets/ctrace.png');
@@ -46,4 +47,5 @@ app.whenReady().then(() => {
   // Setup IPC handlers
   setupFileHandlers(mainWindow);
   setupEditorHandlers();
+  setupCtraceHandlers();
 });

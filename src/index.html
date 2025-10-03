@@ -264,6 +264,9 @@
         <div style="margin-bottom: 20px;">
           <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #f0f6fc;">Quick Actions</h3>
           <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button style="background: #1f6feb; border: none; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.15s ease;" onclick="runCTrace()">
+              ▶ Run CTrace
+            </button>
             <button style="background: #21262d; border: 1px solid #30363d; color: #f0f6fc; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.15s ease;" onclick="formatCode()">
               Format Document
             </button>
@@ -271,6 +274,15 @@
               Toggle Word Wrap
             </button>
           </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #f0f6fc;">CTrace Output</h3>
+          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+            <button style="background: #21262d; border: 1px solid #30363d; color: #f0f6fc; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 11px;" onclick="clearCTraceOutput()">Clear</button>
+            <button style="background: #21262d; border: 1px solid #30363d; color: #f0f6fc; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 11px;" onclick="copyCTraceOutput()">Copy</button>
+          </div>
+          <pre id="ctrace-output" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 12px; color: #f0f6fc; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 12px; line-height: 1.5; height: 320px; max-height: 65vh; overflow: auto; white-space: pre-wrap;">Waiting to run...</pre>
         </div>
         
         <div style="margin-bottom: 20px;">
