@@ -41,6 +41,73 @@ class UIController {
     // Initialize with explorer view and welcome screen
     this.showExplorer();
     this.tabManager.showWelcomeScreen();
+
+    // Add refresh button event listener
+    const refreshBtn = document.getElementById('refresh-file-tree');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => {
+        this.refreshFileTree();
+      });
+    }
+
+    // Set up file system watcher for auto-refresh
+    this.setupFileTreeWatcher();
+  }
+  /**
+   * Set up file system watcher to auto-refresh file tree
+   */
+  setupFileTreeWatcher() {
+    const workspacePath = this.fileOpsManager.getCurrentWorkspacePath();
+    if (!workspacePath) return;
+    // Listen for file system change events from main process
+    window.ipcRenderer.on('workspace-changed', (event, changedPath) => {
+      // Only refresh if the change is in the current workspace
+      if (changedPath && changedPath.startsWith(workspacePath)) {
+        this.refreshFileTree();
+      }
+    });
+    // Request main process to start watching
+    window.ipcRenderer.invoke('watch-workspace', workspacePath);
+  }
+  /**
+   * Refresh the file tree in the explorer view
+   */
+  async refreshFileTree() {
+    // Only refresh if workspace is open
+    const workspacePath = this.fileOpsManager.getCurrentWorkspacePath();
+    if (!workspacePath) {
+      this.notificationManager.showWarning('No workspace open to refresh');
+      return;
+    }
+    // Request updated file tree from main process
+    try {
+      const result = await window.ipcRenderer.invoke('get-file-tree', workspacePath);
+      if (result.success) {
+        const folderName = workspacePath.split(/[/\\]/).pop();
+        this.fileOpsManager.updateWorkspaceUI(folderName, result.fileTree);
+        this.notificationManager.showSuccess('File tree refreshed');
+      } else {
+        this.notificationManager.showError('Failed to refresh file tree: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      this.notificationManager.showError('Error refreshing file tree: ' + error.message);
+    }
+  }
+
+  /**
+   * Setup file tree watcher to listen for automatic updates
+   */
+  setupFileTreeWatcher() {
+    // Listen for workspace changes from file watcher in main process
+    window.ipcRenderer.on('workspace-changed', (event, data) => {
+      if (data.success) {
+        const folderName = data.folderPath.split(/[/\\]/).pop();
+        this.fileOpsManager.updateWorkspaceUI(folderName, data.fileTree);
+        console.log('File tree auto-refreshed due to file system changes');
+      } else {
+        console.error('Error in workspace change notification:', data.error);
+      }
+    });
   }
 
   /**
