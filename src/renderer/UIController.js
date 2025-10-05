@@ -10,24 +10,100 @@ const fileTypeUtils = require('./utils/fileTypeUtils');
 
 /**
  * Main UI Controller - Coordinates all managers and components
+ * 
+ * This is the central coordinator for the entire application UI. It manages
+ * the interaction between different managers and handles global UI state.
+ * 
+ * @class UIController
+ * @author CTrace GUI Team
+ * @version 1.0.0
+ * 
+ * @example
+ * // UIController is automatically instantiated in the HTML
+ * const uiController = new UIController();
  */
 class UIController {
+  /**
+   * Creates an instance of UIController and initializes all managers.
+   * 
+   * @constructor
+   * @memberof UIController
+   */
   constructor() {
-    // Initialize managers
+    /**
+     * Notification manager instance
+     * @type {NotificationManager}
+     * @private
+     */
     this.notificationManager = new NotificationManager();
+    
+    /**
+     * Editor manager instance
+     * @type {EditorManager}
+     * @private
+     */
     this.editorManager = new EditorManager();
+    
+    /**
+     * Tab manager instance
+     * @type {TabManager}
+     * @private
+     */
     this.tabManager = new TabManager(this.editorManager, this.notificationManager);
+    
+    /**
+     * Search manager instance
+     * @type {SearchManager}
+     * @private
+     */
     this.searchManager = new SearchManager(this.editorManager, this.notificationManager);
+    
+    /**
+     * File operations manager instance
+     * @type {FileOperationsManager}
+     * @private
+     */
     this.fileOpsManager = new FileOperationsManager(this.tabManager, this.notificationManager);
 
-    // State
+    /**
+     * Flag indicating if UI is being resized
+     * @type {boolean}
+     * @private
+     */
     this.isResizing = false;
+    
+    /**
+     * Type of resize operation (sidebar, toolsPanel)
+     * @type {string|null}
+     * @private
+     */
     this.resizeType = null;
+    
+    /**
+     * Currently active menu
+     * @type {string|null}
+     * @private
+     */
     this.activeMenu = null;
 
     this.init();
   }
 
+  /**
+   * Initializes the UI Controller and sets up all necessary components.
+   * 
+   * This method is called automatically by the constructor and sets up:
+   * - Event listeners for UI interactions
+   * - Keyboard shortcuts
+   * - Resizing functionality
+   * - Menu systems
+   * - UI components
+   * - Manager interconnections
+   * - File tree watcher
+   * 
+   * @memberof UIController
+   * @private
+   */
   init() {
     this.setupEventListeners();
     this.setupKeyboardShortcuts();
@@ -70,7 +146,19 @@ class UIController {
     window.ipcRenderer.invoke('watch-workspace', workspacePath);
   }
   /**
-   * Refresh the file tree in the explorer view
+   * Refreshes the file tree in the explorer view.
+   * 
+   * This method manually triggers a refresh of the file tree to show any
+   * new files or folders that may have been added to the workspace. It
+   * communicates with the main process to get an updated file tree structure.
+   * 
+   * @async
+   * @memberof UIController
+   * @throws {Error} When file tree refresh fails
+   * 
+   * @example
+   * // Refresh is typically triggered by the refresh button
+   * await uiController.refreshFileTree();
    */
   async refreshFileTree() {
     // Only refresh if workspace is open

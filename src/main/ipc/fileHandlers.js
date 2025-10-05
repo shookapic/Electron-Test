@@ -1,16 +1,46 @@
+/**
+ * @fileoverview IPC handlers for file operations in the main process.
+ * 
+ * This module provides all IPC handlers for file system operations including
+ * opening files/folders, saving files, reading file content, and managing
+ * file system watching for automatic UI updates.
+ * 
+ * @author CTrace GUI Team
+ * @version 1.0.0
+ */
+
 const { ipcMain, dialog } = require('electron');
 const fs = require('fs').promises;
 const path = require('path');
 const chokidar = require('chokidar');
 const { detectFileEncoding, buildFileTree, searchInDirectory, FILE_SIZE_LIMIT } = require('../utils/fileUtils');
 
-// File watcher instance
+/**
+ * File watcher instance for monitoring workspace changes
+ * @type {chokidar.FSWatcher|null}
+ * @private
+ */
 let fileWatcher = null;
+
+/**
+ * Currently watched workspace path
+ * @type {string|null}
+ * @private
+ */
 let currentWatchPath = null;
 
 /**
- * Setup all IPC handlers for file operations
- * @param {BrowserWindow} mainWindow - Main window reference
+ * Sets up all IPC handlers for file operations.
+ * 
+ * This function registers all IPC handlers that the renderer process can invoke
+ * for file operations. It handles folder dialogs, file dialogs, saving files,
+ * reading files, and file tree operations.
+ * 
+ * @function setupFileHandlers
+ * @param {BrowserWindow} mainWindow - Main window reference for dialogs
+ * 
+ * @example
+ * setupFileHandlers(mainWindow);
  */
 function setupFileHandlers(mainWindow) {
   // Open folder dialog
