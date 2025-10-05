@@ -64,16 +64,18 @@
             <path d="M1.5 3a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1h-13zm0 5a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1h-13zm0 5a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1h-13z"/>
           </svg>
           <span id="sidebar-title">Explorer</span>
-          <button id="refresh-file-tree" title="Refresh" style="margin-left: 8px; background: none; border: none; cursor: pointer; padding: 2px;">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 1 1 .908-.418A4 4 0 1 0 8 4V1.5a.5.5 0 0 1 1 0v3A.5.5 0 0 1 8.5 5h-3a.5.5 0 0 1 0-1H8z"/>
-            </svg>
-          </button>
         </div>
       </div>
       <div class="sidebar-content">
         <div id="explorer-view">
-          <div style="color: #7d8590; font-size: 11px; margin-bottom: 12px; font-weight: 600;">WORKSPACE</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div style="color: #7d8590; font-size: 11px; font-weight: 600;">WORKSPACE</div>
+            <button id="refresh-file-tree" title="Refresh" style="background: none; border: none; cursor: pointer; padding: 2px;">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 1 1 .908-.418A4 4 0 1 0 8 4V1.5a.5.5 0 0 1 1 0v3A.5.5 0 0 1 8.5 5h-3a.5.5 0 0 1 0-1H8z"/>
+              </svg>
+            </button>
+          </div>
           <div id="workspace-folder" style="display: none;">
             <div style="color: #7d8590; font-size: 11px; margin-bottom: 8px; font-weight: 600;" id="workspace-name"></div>
             <div id="file-tree" class="file-tree"></div>
@@ -272,12 +274,6 @@
             <button style="background: #1f6feb; border: none; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.15s ease;" onclick="runCTrace()">
               ▶ Run CTrace
             </button>
-            <button style="background: #21262d; border: 1px solid #30363d; color: #f0f6fc; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.15s ease;" onclick="formatCode()">
-              Format Document
-            </button>
-            <button style="background: #21262d; border: 1px solid #30363d; color: #f0f6fc; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.15s ease;" onclick="toggleWordWrap()">
-              Toggle Word Wrap
-            </button>
           </div>
         </div>
 
@@ -289,29 +285,9 @@
           </div>
           <pre id="ctrace-output" style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 12px; color: #f0f6fc; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 12px; line-height: 1.5; height: 320px; max-height: 65vh; overflow: auto; white-space: pre-wrap;">Waiting to run...</pre>
         </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #f0f6fc;">Settings</h3>
-          <div style="font-size: 12px; color: #7d8590;">
-            <div style="margin-bottom: 8px;">
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                <input type="checkbox" id="autoSave" style="accent-color: #1f6feb;"> Auto Save
-              </label>
-            </div>
-            <div style="margin-bottom: 8px;">
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                <input type="checkbox" id="lineNumbers" checked style="accent-color: #1f6feb;"> Line Numbers
-              </label>
-            </div>
-          </div>
-        </div>
 
         <div>
           <!-- <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #f0f6fc;">Extensions</h3> -->
-          <div style="font-size: 12px; color: #7d8590;">
-            <p>No extensions installed</p>
-            <button style="background: #1f6feb; border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px;">Browse Extensions</button>
-          </div>
         </div>
       </div>
     </div>
