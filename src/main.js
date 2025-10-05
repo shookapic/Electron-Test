@@ -36,17 +36,33 @@ function createWindow () {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
+    minWidth: 800,
+    minHeight: 600,
     icon: iconApp,
+    frame: false,               // Custom frame for consistency across platforms
+    titleBarStyle: 'hidden',    // Hide native title bar
+    titleBarOverlay: {
+      color: '#0d1117',         // Match VS Code dark theme
+      symbolColor: '#ffffff',
+      height: 30
+    },
     webPreferences: {
       nodeIntegration: true,      // allows require() in renderer
-      contextIsolation: false     // disables security isolation
+      contextIsolation: false,    // disables security isolation
+      webSecurity: false          // For loading local fonts
     }
   });
 
   win.loadFile('src/index.html');
-  // Remove default menu bar
-  win.setMenuBarVisibility(false);
-  win.removeMenu();
+  
+  // Custom window controls for frameless window
+  win.on('maximize', () => {
+    win.webContents.send('window-maximized', true);
+  });
+  
+  win.on('unmaximize', () => {
+    win.webContents.send('window-maximized', false);
+  });
   
   return win;
 }
@@ -61,6 +77,38 @@ try {
   console.log("electron-reload not active");
 }
 
+/**
+ * Sets up IPC handlers for custom window controls.
+ * 
+ * This function handles window minimize, maximize, and close operations
+ * for the custom frameless window title bar.
+ * 
+ * @function setupWindowControls
+ * @param {BrowserWindow} window - The main window instance
+ */
+function setupWindowControls(window) {
+  const { ipcMain } = require('electron');
+  
+  // Window minimize
+  ipcMain.on('window-minimize', () => {
+    window.minimize();
+  });
+  
+  // Window maximize/restore toggle
+  ipcMain.on('window-maximize-toggle', () => {
+    if (window.isMaximized()) {
+      window.unmaximize();
+    } else {
+      window.maximize();
+    }
+  });
+  
+  // Window close
+  ipcMain.on('window-close', () => {
+    window.close();
+  });
+}
+
 // Global reference to main window
 let mainWindow;
 
@@ -71,4 +119,5 @@ app.whenReady().then(() => {
   setupFileHandlers(mainWindow);
   setupEditorHandlers();
   setupCtraceHandlers();
+  setupWindowControls(mainWindow);
 });

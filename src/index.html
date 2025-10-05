@@ -20,6 +20,24 @@
   <link rel="stylesheet" href="styles/statusbar.css">
   <link rel="stylesheet" href="styles/tools-panel.css">
   <link rel="stylesheet" href="styles/resizers.css">
+  <link rel="stylesheet" href="styles/titlebar.css">
+  
+  <!-- Font loading for cross-platform emoji support -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI+Emoji&display=swap');
+    
+    /* Fallback emoji font stack for cross-platform support */
+    .emoji-font {
+      font-family: 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', 'Twemoji Mozilla', system-ui, sans-serif;
+    }
+    
+    /* Apply emoji fonts globally */
+    body, * {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji';
+    }
+  </style>
+  
   <!-- Make ipcRenderer available globally -->
   <script>
     const { ipcRenderer } = require('electron');
@@ -33,6 +51,33 @@
     const UIController = require('./renderer/UIController');
   </script>
 <body>
+  <!-- Custom Title Bar -->
+  <div class="title-bar">
+    <div class="title-bar-drag-region">
+      <div class="title-bar-title">
+        <img src="../assets/ctrace.png" alt="CTrace" class="title-bar-icon">
+        <span>CTrace GUI</span>
+      </div>
+    </div>
+    <div class="title-bar-controls">
+      <button class="title-bar-control" id="minimize-btn" title="Minimize">
+        <svg width="10" height="10" viewBox="0 0 10 10">
+          <path d="M0,5 L10,5" stroke="currentColor" stroke-width="1"/>
+        </svg>
+      </button>
+      <button class="title-bar-control" id="maximize-btn" title="Maximize">
+        <svg width="10" height="10" viewBox="0 0 10 10">
+          <path d="M0,0 L10,0 L10,10 L0,10 Z" stroke="currentColor" stroke-width="1" fill="none"/>
+        </svg>
+      </button>
+      <button class="title-bar-control close" id="close-btn" title="Close">
+        <svg width="10" height="10" viewBox="0 0 10 10">
+          <path d="M0,0 L10,10 M10,0 L0,10" stroke="currentColor" stroke-width="1"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  
   <div class="ide-container">
     <!-- Main Content Area (Left Side) -->
     <div class="main-content-area">

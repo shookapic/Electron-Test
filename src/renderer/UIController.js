@@ -128,6 +128,9 @@ class UIController {
 
     // Set up file system watcher for auto-refresh
     this.setupFileTreeWatcher();
+    
+    // Set up custom title bar controls
+    this.setupTitleBarControls();
   }
   /**
    * Set up file system watcher to auto-refresh file tree
@@ -196,6 +199,91 @@ class UIController {
         console.error('Error in workspace change notification:', data.error);
       }
     });
+  }
+
+  /**
+   * Setup custom title bar controls for frameless window.
+   * 
+   * This method handles the custom window controls (minimize, maximize, close)
+   * and window state management for the frameless window.
+   * 
+   * @memberof UIController
+   * @private
+   */
+  setupTitleBarControls() {
+    const { remote } = require('electron');
+    const currentWindow = remote ? remote.getCurrentWindow() : require('electron').remote?.getCurrentWindow();
+    
+    // If remote is not available, use IPC
+    if (!currentWindow) {
+      // Setup IPC-based window controls
+      const minimizeBtn = document.getElementById('minimize-btn');
+      const maximizeBtn = document.getElementById('maximize-btn');
+      const closeBtn = document.getElementById('close-btn');
+      
+      if (minimizeBtn) {
+        minimizeBtn.addEventListener('click', () => {
+          window.ipcRenderer.send('window-minimize');
+        });
+      }
+      
+      if (maximizeBtn) {
+        maximizeBtn.addEventListener('click', () => {
+          window.ipcRenderer.send('window-maximize-toggle');
+        });
+      }
+      
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          window.ipcRenderer.send('window-close');
+        });
+      }
+      
+      // Listen for window state changes
+      window.ipcRenderer.on('window-maximized', (event, isMaximized) => {
+        document.body.classList.toggle('window-maximized', isMaximized);
+      });
+      
+      return;
+    }
+    
+    // Direct window control (if remote is available)
+    const minimizeBtn = document.getElementById('minimize-btn');
+    const maximizeBtn = document.getElementById('maximize-btn');
+    const closeBtn = document.getElementById('close-btn');
+    
+    if (minimizeBtn) {
+      minimizeBtn.addEventListener('click', () => {
+        currentWindow.minimize();
+      });
+    }
+    
+    if (maximizeBtn) {
+      maximizeBtn.addEventListener('click', () => {
+        if (currentWindow.isMaximized()) {
+          currentWindow.unmaximize();
+        } else {
+          currentWindow.maximize();
+        }
+      });
+    }
+    
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        currentWindow.close();
+      });
+    }
+    
+    // Update maximize button icon based on window state
+    const updateMaximizeButton = () => {
+      document.body.classList.toggle('window-maximized', currentWindow.isMaximized());
+    };
+    
+    currentWindow.on('maximize', updateMaximizeButton);
+    currentWindow.on('unmaximize', updateMaximizeButton);
+    
+    // Initial state
+    updateMaximizeButton();
   }
 
   /**
