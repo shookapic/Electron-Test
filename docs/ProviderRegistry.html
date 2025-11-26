@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: NotificationManager</title>
+    <title>JSDoc: Class: ProviderRegistry</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: NotificationManager</h1>
+    <h1 class="page-title">Class: ProviderRegistry</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>NotificationManager<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ProviderRegistry<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Notification Manager - Handles user notifications and messages</p></div>
+            <div class="class-description"><p>Registry of available LLM providers</p></div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="NotificationManager"><span class="type-signature"></span>new NotificationManager<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ProviderRegistry"><span class="type-signature"></span>new ProviderRegistry<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line4">line 4</a>
+        <a href="main_external_llm_ProviderRegistry.js.html">main/external_llm/ProviderRegistry.js</a>, <a href="main_external_llm_ProviderRegistry.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -149,7 +149,7 @@
     
 
     
-    <h4 class="name" id="clearAll"><span class="type-signature"></span>clearAll<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="createProvider"><span class="type-signature"></span>createProvider<span class="signature">(id, config)</span><span class="type-signature"> &rarr; {<a href="BaseProvider.html">BaseProvider</a>}</span></h4>
     
 
     
@@ -157,95 +157,7 @@
 
 
 <div class="description">
-    <p>Clear all notifications</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line89">line 89</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="showConfirmDialog"><span class="type-signature"></span>showConfirmDialog<span class="signature">(message, title)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Show confirmation dialog</p>
+    <p>Create a provider instance</p>
 </div>
 
 
@@ -271,8 +183,6 @@
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -283,7 +193,7 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -298,25 +208,21 @@
             
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last"><p>Message to display</p></td>
+            <td class="description last"><p>Provider identifier</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>title</code></td>
+                <td class="name"><code>config</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
@@ -325,14 +231,8 @@
             
 
             
-                <td class="default">
-                
-                    Confirm
-                
-                </td>
-            
 
-            <td class="description last"><p>Dialog title</p></td>
+            <td class="description last"><p>Provider configuration</p></td>
         </tr>
 
     
@@ -373,7 +273,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line188">line 188</a>
+        <a href="main_external_llm_ProviderRegistry.js.html">main/external_llm/ProviderRegistry.js</a>, <a href="main_external_llm_ProviderRegistry.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -402,9 +302,7 @@
 
         
 <div class="param-desc">
-    <ul>
-<li>User confirmation</li>
-</ul>
+    <p>Provider instance</p>
 </div>
 
 
@@ -415,7 +313,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;boolean></span>
+<span class="param-type"><a href="BaseProvider.html">BaseProvider</a></span>
 
 
     </dd>
@@ -433,7 +331,7 @@
     
 
     
-    <h4 class="name" id="showEncodingWarningDialog"><span class="type-signature"></span>showEncodingWarningDialog<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    <h4 class="name" id="getAllProviders"><span class="type-signature"></span>getAllProviders<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;Object>}</span></h4>
     
 
     
@@ -441,7 +339,7 @@
 
 
 <div class="description">
-    <p>Show encoding warning dialog</p>
+    <p>Get all available providers</p>
 </div>
 
 
@@ -485,7 +383,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line102">line 102</a>
+        <a href="main_external_llm_ProviderRegistry.js.html">main/external_llm/ProviderRegistry.js</a>, <a href="main_external_llm_ProviderRegistry.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -514,9 +412,7 @@
 
         
 <div class="param-desc">
-    <ul>
-<li>User choice ('yes' or 'no')</li>
-</ul>
+    <p>Array of provider info { id, name, fields }</p>
 </div>
 
 
@@ -527,7 +423,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;string></span>
+<span class="param-type">Array.&lt;Object></span>
 
 
     </dd>
@@ -545,7 +441,7 @@
     
 
     
-    <h4 class="name" id="showError"><span class="type-signature"></span>showError<span class="signature">(message)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="hasProvider"><span class="type-signature"></span>hasProvider<span class="signature">(id)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -553,7 +449,7 @@
 
 
 <div class="description">
-    <p>Show error notification</p>
+    <p>Check if a provider exists</p>
 </div>
 
 
@@ -589,7 +485,7 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -605,7 +501,7 @@
 
             
 
-            <td class="description last"><p>Message to display</p></td>
+            <td class="description last"><p>Provider identifier</p></td>
         </tr>
 
     
@@ -646,7 +542,185 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line66">line 66</a>
+        <a href="main_external_llm_ProviderRegistry.js.html">main/external_llm/ProviderRegistry.js</a>, <a href="main_external_llm_ProviderRegistry.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="register"><span class="type-signature"></span>register<span class="signature">(id, ProviderClass)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Register a provider class</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Unique provider identifier</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ProviderClass</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Provider class constructor</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="main_external_llm_ProviderRegistry.js.html">main/external_llm/ProviderRegistry.js</a>, <a href="main_external_llm_ProviderRegistry.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -682,7 +756,7 @@
     
 
     
-    <h4 class="name" id="showInfo"><span class="type-signature"></span>showInfo<span class="signature">(message)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="registerDefaultProviders"><span class="type-signature"></span>registerDefaultProviders<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -690,7 +764,7 @@
 
 
 <div class="description">
-    <p>Show info notification</p>
+    <p>Register default built-in providers</p>
 </div>
 
 
@@ -699,55 +773,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Message to display</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -783,482 +808,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line82">line 82</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="showNotification"><span class="type-signature"></span>showNotification<span class="signature">(message, type, duration)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Show notification</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Message to display</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-                <td class="default">
-                
-                    info
-                
-                </td>
-            
-
-            <td class="description last"><p>Notification type (success, error, info, warning)</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>duration</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-                <td class="default">
-                
-                    4000
-                
-                </td>
-            
-
-            <td class="description last"><p>Duration in milliseconds (default 4000)</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line15">line 15</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="showSuccess"><span class="type-signature"></span>showSuccess<span class="signature">(message)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Show success notification</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Message to display</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line58">line 58</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="showWarning"><span class="type-signature"></span>showWarning<span class="signature">(message)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Show warning notification</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Message to display</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="renderer_managers_NotificationManager.js.html">renderer/managers/NotificationManager.js</a>, <a href="renderer_managers_NotificationManager.js.html#line74">line 74</a>
+        <a href="main_external_llm_ProviderRegistry.js.html">main/external_llm/ProviderRegistry.js</a>, <a href="main_external_llm_ProviderRegistry.js.html#line30">line 30</a>
     </li></ul></dd>
     
 

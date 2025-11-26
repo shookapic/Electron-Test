@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: main/ipc/editorHandlers.js</title>
+    <title>JSDoc: Source: main/external_llm/PerplexityProvider.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: main/ipc/editorHandlers.js</h1>
+    <h1 class="page-title">Source: main/external_llm/PerplexityProvider.js</h1>
 
     
 
@@ -26,42 +26,132 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { ipcMain } = require('electron');
-const { exec } = require('child_process');
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Perplexity API Provider (Example)
+ * 
+ * Perplexity offers LLMs with real-time internet search capabilities,
+ * perfect for getting up-to-date information and current best practices.
+ * 
+ * @author CTrace GUI Team
+ * @version 1.0.0
+ */
+
+const https = require('https');
+const BaseProvider = require('./BaseProvider');
 
 /**
- * Setup IPC handlers for editor operations
+ * Perplexity API Provider - Search-augmented responses
+ * @extends BaseProvider
  */
-function setupEditorHandlers() {
-  // Open editor listener
-  ipcMain.on('open-editor', () => {
-    console.log("button clicked !");
-    let command;
+class PerplexityProvider extends BaseProvider {
+  constructor(config) {
+    super(config);
+    this.endpoint = 'https://api.perplexity.ai/chat/completions';
+    this.model = config.model || 'llama-3.1-sonar-small-128k-online';
+    this.apiKey = config.apiKey;
+  }
 
-    switch (process.platform) {
-      case 'win32': // Windows
-        command = 'notepad';
-        break;
-      case 'darwin': // macOS
-        command = 'open -a TextEdit';
-        break;
-      case 'linux': // Linux
-        command = 'x-terminal-emulator -e nano'; // or just 'nano' if terminal already open
-        break;
-      default:
-        console.log('Unsupported OS');
-        return;
+  getName() {
+    return 'Perplexity (Search-Augmented)';
+  }
+
+  getConfigFields() {
+    return [
+      {
+        name: 'apiKey',
+        label: 'API Key',
+        type: 'password',
+        required: true,
+        placeholder: 'pplx-...',
+        help: 'Get your API key from https://www.perplexity.ai/settings/api'
+      },
+      {
+        name: 'model',
+        label: 'Model',
+        type: 'select',
+        required: true,
+        default: 'llama-3.1-sonar-small-128k-online',
+        options: [
+          { value: 'llama-3.1-sonar-small-128k-online', label: 'Sonar Small (Online, 128K)' },
+          { value: 'llama-3.1-sonar-large-128k-online', label: 'Sonar Large (Online, 128K)' },
+          { value: 'llama-3.1-sonar-huge-128k-online', label: 'Sonar Huge (Online, 128K)' },
+          { value: 'llama-3.1-8b-instruct', label: 'LLaMA 3.1 8B (Offline)' },
+          { value: 'llama-3.1-70b-instruct', label: 'LLaMA 3.1 70B (Offline)' }
+        ],
+        help: 'Online models have internet search, offline models don\'t'
+      }
+    ];
+  }
+
+  async chat(message, options = {}) {
+    if (!this.apiKey) {
+      return { success: false, error: 'API key is required' };
     }
 
-    exec(command, (err) => {
-      if (err) {
-        console.error('Failed to open editor:', err);
-      }
+    const messages = [];
+    
+    // Add system prompt
+    const systemPrompt = options.systemPrompt || 'You are a helpful coding assistant with access to current information.';
+    messages.push({ role: 'system', content: systemPrompt });
+    messages.push({ role: 'user', content: message });
+
+    const body = JSON.stringify({
+      model: this.model,
+      messages: messages,
+      temperature: options.temperature !== undefined ? options.temperature : 0.7,
+      max_tokens: options.maxTokens || 2000
     });
-  });
+
+    return new Promise((resolve) => {
+      const requestOptions = {
+        hostname: 'api.perplexity.ai',
+        port: 443,
+        path: '/chat/completions',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Length': Buffer.byteLength(body)
+        },
+        timeout: 60000
+      };
+
+      const req = https.request(requestOptions, (res) => {
+        let data = '';
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.choices &amp;&amp; parsed.choices[0] &amp;&amp; parsed.choices[0].message) {
+              resolve({ success: true, reply: parsed.choices[0].message.content });
+            } else if (parsed.error) {
+              resolve({ success: false, error: parsed.error.message || 'API error' });
+            } else {
+              resolve({ success: false, error: 'Invalid API response' });
+            }
+          } catch (err) {
+            resolve({ success: false, error: 'Failed to parse API response: ' + err.message });
+          }
+        });
+      });
+
+      req.on('error', (err) => {
+        resolve({ success: false, error: 'API request failed: ' + err.message });
+      });
+
+      req.on('timeout', () => {
+        req.destroy();
+        resolve({ success: false, error: 'API request timed out' });
+      });
+
+      req.write(body);
+      req.end();
+    });
+  }
 }
 
-module.exports = { setupEditorHandlers };</code></pre>
+module.exports = PerplexityProvider;
+</code></pre>
         </article>
     </section>
 

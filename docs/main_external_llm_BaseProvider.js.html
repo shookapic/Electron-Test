@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: main/ipc/editorHandlers.js</title>
+    <title>JSDoc: Source: main/external_llm/BaseProvider.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: main/ipc/editorHandlers.js</h1>
+    <h1 class="page-title">Source: main/external_llm/BaseProvider.js</h1>
 
     
 
@@ -26,42 +26,104 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { ipcMain } = require('electron');
-const { exec } = require('child_process');
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Base class for LLM providers
+ * 
+ * This defines the interface that all LLM providers must implement,
+ * ensuring consistent behavior across different services.
+ * 
+ * @author CTrace GUI Team
+ * @version 1.0.0
+ */
 
 /**
- * Setup IPC handlers for editor operations
+ * Base class for all LLM providers
+ * @abstract
  */
-function setupEditorHandlers() {
-  // Open editor listener
-  ipcMain.on('open-editor', () => {
-    console.log("button clicked !");
-    let command;
+class BaseProvider {
+  /**
+   * Create a provider instance
+   * @param {Object} config - Provider configuration
+   */
+  constructor(config) {
+    if (new.target === BaseProvider) {
+      throw new Error('BaseProvider is abstract and cannot be instantiated directly');
+    }
+    this.config = config;
+  }
 
-    switch (process.platform) {
-      case 'win32': // Windows
-        command = 'notepad';
-        break;
-      case 'darwin': // macOS
-        command = 'open -a TextEdit';
-        break;
-      case 'linux': // Linux
-        command = 'x-terminal-emulator -e nano'; // or just 'nano' if terminal already open
-        break;
-      default:
-        console.log('Unsupported OS');
-        return;
+  /**
+   * Get provider name
+   * @abstract
+   * @returns {string} Provider name
+   */
+  getName() {
+    throw new Error('getName() must be implemented by provider');
+  }
+
+  /**
+   * Get required configuration fields
+   * @abstract
+   * @returns {Array&lt;Object>} Array of field definitions with { name, label, type, required, placeholder, default }
+   */
+  getConfigFields() {
+    throw new Error('getConfigFields() must be implemented by provider');
+  }
+
+  /**
+   * Validate configuration
+   * @param {Object} config - Configuration to validate
+   * @returns {Object} { valid: boolean, errors: Array&lt;string> }
+   */
+  validateConfig(config) {
+    const errors = [];
+    const fields = this.getConfigFields();
+
+    for (const field of fields) {
+      if (field.required &amp;&amp; !config[field.name]) {
+        errors.push(`${field.label} is required`);
+      }
     }
 
-    exec(command, (err) => {
-      if (err) {
-        console.error('Failed to open editor:', err);
-      }
-    });
-  });
+    return {
+      valid: errors.length === 0,
+      errors
+    };
+  }
+
+  /**
+   * Send a chat message to the LLM
+   * @abstract
+   * @param {string} message - User message
+   * @param {Object} options - Additional options (systemPrompt, temperature, etc.)
+   * @returns {Promise&lt;Object>} { success: boolean, reply?: string, error?: string }
+   */
+  async chat(message, options = {}) {
+    throw new Error('chat() must be implemented by provider');
+  }
+
+  /**
+   * Test provider connection
+   * @returns {Promise&lt;Object>} { success: boolean, error?: string }
+   */
+  async testConnection() {
+    try {
+      const result = await this.chat('Hello', { temperature: 0.1 });
+      return {
+        success: result.success,
+        error: result.error
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
 }
 
-module.exports = { setupEditorHandlers };</code></pre>
+module.exports = BaseProvider;
+</code></pre>
         </article>
     </section>
 
